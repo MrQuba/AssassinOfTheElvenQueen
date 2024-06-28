@@ -1,8 +1,6 @@
-
+#include "../Interfaces/Drawable.hpp"
 #pragma once
-class Component {
+class Component : public virtual Drawable {
 public:
-	virtual void update() = 0;
-	virtual void draw(sf::RenderWindow& window) = 0;
 protected:
 };

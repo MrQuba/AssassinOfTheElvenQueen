@@ -3,11 +3,12 @@
 #include "../Components/HealthComponent.hpp"
 #pragma once
 
-class Player : public Character {
+class Player : public Character{
 public:
 	Player(Path txt_path, Area txt_area) : Character(txt_path, txt_area),
-		velocity(Velocity(0.f, 0.f)), 
-		input(new InputComponent<Player>(Velocity(5.f, 25.f), &this->velocity, this)),
+		speed(Velocity(5.f, 25.f)),
+		velocity(Velocity(0.f, 0.f)),
+		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
 		health(new HealthComponent(Size(current_Health, 16.f))){
 			// Constructor
 				// Adding components that can be drawn to the set
@@ -18,7 +19,6 @@ public:
 				// Creating reference in health for variable representing current set
 			health->createReference(&current_Health);
 	}
-	// TODO, fix speed param
 
 	void update() override {
 		for (Component* comp : importantComponents) {
@@ -26,6 +26,7 @@ public:
 		}
 
 	}
+	
 	void draw(sf::RenderWindow& window) override {
 		window.draw(static_cast<sf::Sprite&>(*this));
 
@@ -33,13 +34,23 @@ public:
 			comp->draw(window);
 		}
 	}
+
+	virtual void onCollision(Entity* ent) override {Character::onCollision(ent);}
+	virtual void onCollisionWithGround(Ground* ground) override {
+		if (checkIfCollidesWithGround(ground) == false) input->setIsFalling(true);
+		else {
+			input->resetJump();
+			input->setIsFalling(false);
+		}
+		Character::onCollisionWithGround(ground);
+	}
 	~Player() {
-		// TODO, fix this
-		//delete input;
+		delete health;
+		delete input;
 	}
 private:
 	InputComponent<Player>* input;
 	HealthComponent* health;
-	const Velocity speed = Velocity(5.f, 25.f);
+	const Velocity speed;
 	Velocity velocity;
 };

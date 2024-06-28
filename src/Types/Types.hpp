@@ -19,3 +19,7 @@ typedef sf::Vector2f Velocity;
 
 typedef sf::Vector2f Size;
 typedef float Health;
+
+typedef std::string LogMessage;
+
+typedef sf::Vector2f Position;

@@ -31,4 +31,6 @@ private:
 };
 #define Log(message) \
     Logger::getInstance().log(message)
+#define Console(message) \
+    std::cout << message << std::endl;
 #endif 

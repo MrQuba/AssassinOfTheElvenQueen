@@ -2,7 +2,7 @@
 #include "../Types/Types.hpp"
 #pragma once
 
-class Texture : sf::Texture{
+class Texture : public sf::Texture{
 public:
 	/// <summary>
 	/// Constructor, a shortcut for texture.loadFromFile...
