@@ -2,7 +2,7 @@
 #include "..\Types\Types.hpp"
 #include <SFML/Graphics.hpp>
 #pragma once
-class HealthComponent : public Component, sf::RectangleShape {
+class HealthComponent : public Component, sf::RectangleShape  {
 public:
 	HealthComponent(Size size) : RectangleShape(size), background(size) {
 		this->setFillColor(sf::Color::Red);
@@ -17,13 +17,15 @@ public:
 	void createReference(Health* var) {
 		health_Pointer = var;
 	}
+	void setPos(Position pos) {
+		background.setPosition(pos);
+		this->setPosition(pos);
+	}
 	void draw(sf::RenderWindow& window) override {
 		window.draw(background);
 		window.draw(static_cast<sf::RectangleShape&>(*this));
 	}
-	~HealthComponent() {
-		delete health_Pointer;
-	}
+	~HealthComponent() {}
 private:
 	sf::RectangleShape background;
 	Health* health_Pointer = nullptr;

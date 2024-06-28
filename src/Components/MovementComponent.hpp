@@ -17,19 +17,19 @@ public:
 		jump(velocity->y);
 		entityPointer->move(*velocity);
 	}
-	~MovementComponent() {
-		delete entityPointer;
-	}
+	~MovementComponent() {}
 	void jump(float& jumpVelocity) {
-		// TODO, add collision logic for reseting jumps
-		if (isJumping) jumpVelocity += ENVIROMENT::GRAVITY; else jumpVelocity = 0;
+		if (isJumping) isFalling = true; 
+		if (isFalling)jumpVelocity += ENVIROMENT::GRAVITY;  else { jumpVelocity = 0; }
 		if (jumpVelocity > 5) jumpVelocity = 5;
 	}
 	bool canJump() { return !isJumping; }
 	void setJumpVar(bool v) {
 		isJumping = v;
 	}
+	void setIsFalling(bool b) { isFalling = b; }
 private:
 	bool isJumping;
+	bool isFalling;
 	EntityPointer entityPointer;
 };

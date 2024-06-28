@@ -5,39 +5,40 @@
 #pragma once
 
 template<class T = sf::Sprite>
-class InputComponent : public Component {
+class InputComponent : public virtual Component {
 public:
-	InputComponent(Velocity speed, Velocity* velocityPointer, T* ent) : velocityPointer(velocityPointer), speed(speed), movement(new MovementComponent<T>(ent) ){}
+	InputComponent(const Velocity* speed, Velocity* velocityPointer, T* ent) : speed(speed), velocityPointer(velocityPointer), movement(new MovementComponent<T>(ent)), config(new Config::DataStructure){}
 	void update() override {
 		// reset velocity
 		velocityPointer->x = 0.0f;
 		// new velocity
-		if (isKeyPressed(config->LEFT)) velocityPointer->x -= speed.x;
-		if (isKeyPressed(config->RIGHT)) velocityPointer->x += speed.x;
+		if (isKeyPressed(config->LEFT)) velocityPointer->x -= speed->x;
+		if (isKeyPressed(config->RIGHT)) velocityPointer->x += speed->x;
 		if (isKeyPressed(config->JUMP) && movement->canJump()) {
 			movement->setJumpVar(true);
-			velocityPointer->y += -speed.y;
+			velocityPointer->y += -speed->y;
 		}
-		if (isKeyPressed(sf::Keyboard::Z)) resetJump();
 		//move entity
 		movement->move(velocityPointer);
 	}
 	void resetJump(){
 		movement->setJumpVar(false);
 	}
+	void setIsFalling(bool b) {
+		movement->setIsFalling(b);
+	}
 	Config::DataStructure* getConfig() { return config; }
 	~InputComponent() { 
 		delete movement;
-		delete velocityPointer;
-		//delete config;
+		delete config;
 	}
 	void draw (sf::RenderWindow& window) override {}
 private:
 	bool isKeyPressed(Key key) {
 		return sf::Keyboard::isKeyPressed(key);
 	}
-	Config::DataStructure* config = new Config::DataStructure;
+	Config::DataStructure* config;
 	Velocity* velocityPointer;
-	Velocity speed;
+	const Velocity* speed;
 	MovementComponent<T>* movement;
 };
