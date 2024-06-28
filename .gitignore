@@ -51,3 +51,4 @@
 *.json
 *.db*
 *.sln
+logs/
