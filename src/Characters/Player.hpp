@@ -1,6 +1,8 @@
 #include "Character.hpp"
 #include "../Components/InputComponent.hpp"
 #include "../Components/HealthComponent.hpp"
+#include "../Game/Camera.hpp"
+#include "../Constants/SizeConstants.hpp"
 #pragma once
 
 class Player : public Character{
@@ -9,7 +11,8 @@ public:
 		speed(Velocity(5.f, 25.f)),
 		velocity(Velocity(0.f, 0.f)),
 		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
-		health(new HealthComponent(Size(current_Health, 16.f))){
+		health(new HealthComponent(Size(current_Health, 16.f))),
+		camera(new Camera(Point(SIZE::WindowWidth / 2, SIZE::WindowHeight / 2), Size(SIZE::WindowWidth, SIZE::WindowHeight))) {
 			// Constructor
 				// Adding components that can be drawn to the set
 			drawableComponents.insert(health);
@@ -24,9 +27,14 @@ public:
 		for (Component* comp : importantComponents) {
 			comp->update();
 		}
-
+		camera->update(this->getSprite());
+		health->setPos(
+			Position(
+			this->getView()->getCenter().x - (this->getView()->getSize().x / 2),
+			this->getView()->getCenter().y - (this->getView()->getSize().y / 2)
+		));
 	}
-	
+	sf::View* getView() { return camera; }
 	void draw(sf::RenderWindow& window) override {
 		window.draw(static_cast<sf::Sprite&>(*this));
 
@@ -53,4 +61,5 @@ private:
 	HealthComponent* health;
 	const Velocity speed;
 	Velocity velocity;
+	Camera* camera;
 };

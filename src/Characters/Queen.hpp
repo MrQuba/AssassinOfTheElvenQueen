@@ -13,12 +13,13 @@ public:
 		// Constructor
 			// Initializing variables:
 		current_Health = 2000;
+		displayHealth = current_Health;
 			// Adding components that can be drawn to the set
 		drawableComponents.insert(health);
 		// Adding components that should be updated always to the set
 		importantComponents.insert(health);
 		// Creating reference in health for variable representing current set
-		health->createReference(&current_Health);
+		health->createReference(&displayHealth);
 	}
 	void AI() override {
 		movement->move(&this->velocity);
@@ -34,6 +35,7 @@ public:
 	}
 	void update() override {
 		AI();
+		displayHealth = current_Health * 0.5f;
 		for (Component* comp : importantComponents) {
 			comp->update();
 		}
@@ -42,7 +44,8 @@ public:
 	void draw(sf::RenderWindow& window) override {
 		window.draw(static_cast<sf::Sprite&>(*this));
 
-		health->setPos(Position(0, window.getSize().y - this->getLocalBounds().height));
+		health->setPos(Position(window.getView().getCenter().x - (window.getView().getSize().x / 2) + (displayHealth / 2),
+			window.getView().getCenter().y + (window.getView().getSize().y / 2) - 16.f));
 		for (Component* comp : drawableComponents) {
 			comp->draw(window);
 		}
@@ -56,4 +59,5 @@ private:
 	HealthComponent* health;
 	const Velocity speed;
 	Velocity velocity;
+	Health displayHealth;
 };
