@@ -16,7 +16,9 @@ public:
 		hitbox.height = this->getRectShape().getSize().y;
 	}
 	void draw(sf::RenderWindow& window) override {
-		this->setPosition(0, window.getSize().y - (this->getLocalBounds().height));
+		Position position(0,
+				window.getSize().y - this->getLocalBounds().height);
+		this->setPosition(position);
 		window.draw(this->getRectShape());
 	}
 	sf::RectangleShape getRectShape() { return static_cast<sf::RectangleShape>(*this); }

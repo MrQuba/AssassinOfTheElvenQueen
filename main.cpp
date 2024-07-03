@@ -26,8 +26,10 @@ int main() {
     COLLISIONS.push_back(player);
     COLLISIONS.push_back(queen);
     sf::Event* event = new sf::Event();
-    Log("Entering Game Loop...");
+    Log("Entering Game Loop..."); 
     while (window->isOpen()) {
+        // TODO, fix this
+        window->getWindow().setView(*player->getView());
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // PRE CLEAR
@@ -36,30 +38,23 @@ int main() {
         window->getWindow().clear(sf::Color::Blue);
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // POST CLEAR
+        // PRE DRAW
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         while (window->getWindow().pollEvent(*event)) {
             if (event->type == sf::Event::Closed) window->getWindow().close();
             if (event->type == sf::Event::KeyPressed) if(event->key.code == sf::Keyboard::Escape) window->getWindow().close();
         }
-
+        for (auto& ent : COLLISIONS) {
+            for (auto& ent2 : COLLISIONS)
+                if (ent != ent2)
+                    ent->onCollision(ent2);
+            ent->onCollisionWithGround(ground);
+        }
         for (auto& ent : ENTITIES) {
             ent->update();
             ent->draw(window->getWindow());
         }
-        for (auto& ent : COLLISIONS) {
-            for (auto& ent2 : COLLISIONS)
-                if(ent != ent2)
-            ent->onCollision(ent2);
-            Console(ent->getSprite()->getPosition().y);
-            ent->onCollisionWithGround(ground);
-        }
-        ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // PRE DRAW
-        ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DRAW
@@ -70,7 +65,7 @@ int main() {
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DISPLAY
         ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
     }
     Log("Quitting Game Loop...");
     ///////////////////////////////////////////////////
