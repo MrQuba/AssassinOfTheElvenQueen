@@ -27,6 +27,7 @@ public:
 	virtual void onCollisionWithGround(Ground* ground) override {
 		if (checkIfCollidesWithGround(ground) == false) movement->setIsFalling(true);
 		else {
+			velocity.y = 0;
 			movement->setJumpVar(false);
 			movement->setIsFalling(false);
 		}

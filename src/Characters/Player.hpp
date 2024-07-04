@@ -39,6 +39,7 @@ public:
 	virtual void onCollisionWithGround(Ground* ground) override {
 		if (checkIfCollidesWithGround(ground) == false) input->setIsFalling(true);
 		else {
+			velocity.y = 0;
 			input->resetJump();
 			input->setIsFalling(false);
 		}

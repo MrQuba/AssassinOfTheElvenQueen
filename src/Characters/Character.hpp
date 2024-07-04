@@ -11,9 +11,8 @@ public:
 	}
 	virtual void onCollisionWithGround(Ground* ground) override {
 		if (checkIfCollidesWithGround(ground)) {
-			this->setPosition(lastPosition);
+			this->setPosition(this->getPosition().x, ground->getRectShape().getPosition().y - this->getGlobalBounds().height);
 		}
-		else lastPosition = this->getSprite()->getPosition();
 	}
 	bool checkIfCollidesWithGround(Ground* ground) {
 		return this->getBoudingBox()->intersects(ground->hitbox);
@@ -26,5 +25,4 @@ protected:
 	Health current_Health = base_Health;
 	std::unordered_set<Component*> drawableComponents;
 	std::unordered_set<Component*> importantComponents;
-	Position lastPosition;
 };
