@@ -50,8 +50,10 @@ int main() {
     COLLISIONS.push_back(player);
     COLLISIONS.push_back(queen);
     sf::Event* event = new sf::Event();
-    Log("Entering Game Loop...");
+    Log("Entering Game Loop..."); 
     while (window->isOpen()) {
+        // TODO, fix this
+        window->getWindow().setView(*player->getView());
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // PRE CLEAR
@@ -60,7 +62,7 @@ int main() {
         window->getWindow().clear(sf::Color::Blue);
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // POST CLEAR
+        // PRE DRAW
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         while (window->getWindow().pollEvent(*event)) {
@@ -81,6 +83,10 @@ int main() {
                 ent->onCollisionWithGround(env);
             }
         }
+        for (auto& ent : ENTITIES) {
+            ent->update();
+            ent->draw(window->getWindow());
+        }
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // PRE DRAW
@@ -99,7 +105,7 @@ int main() {
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DISPLAY
         ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= 
     }
     Log("Quitting Game Loop...");
     ///////////////////////////////////////////////////

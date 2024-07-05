@@ -7,6 +7,7 @@ typedef std::string Title;
 
 typedef std::string Path;
 typedef sf::IntRect Area;
+typedef sf::FloatRect FloatArea;
 typedef std::string Filename;
 
 typedef sf::FloatRect BoundingBox;
@@ -18,6 +19,7 @@ typedef float Force;
 typedef sf::Vector2f Velocity;
 
 typedef sf::Vector2f Size;
+typedef sf::Vector2f Point;
 typedef float Health;
 
 typedef std::string LogMessage;
