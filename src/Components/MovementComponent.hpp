@@ -12,7 +12,7 @@ template<class T = sf::Sprite>
 class MovementComponent {
 	typedef T* EntityPointer;
 public: 
-	MovementComponent(EntityPointer ptr) : entityPointer(ptr), isJumping(false) {}
+	MovementComponent(EntityPointer ptr) : entityPointer(ptr), isJumping(false), isFalling(true){}
 	void move(Velocity* velocity) {
 		jump(velocity->y);
 		entityPointer->move(*velocity);

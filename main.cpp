@@ -17,7 +17,7 @@ int main() {
     std::vector<Enviroment*> ENVIROMENT;
     game::Window* window = new game::Window(sf::Vector2u(SIZE::WindowWidth, SIZE::WindowHeight), "Assassin of the Elven Queen", 60, WindowStyle(sf::Style::Fullscreen));
     Log("Creating Player object...");
-    Player* player = new Player(PATH::playerSprite, Area(0, 0, 32, 32));
+    Player* player = new Player(PATH::playerSprite, Area(0, 0, 32, 32), Position(40, SIZE::WindowHeight - 90));
     Log("Creating Event object...");
     Queen* queen = new Queen(PATH::playerSprite, Area(0, 0, 32, 32));
     Enviroment* ground = new Enviroment(PATH::playerSprite, 
@@ -29,10 +29,22 @@ int main() {
         Area(0, 0, 32, 32), 
         Size(SIZE::WindowWidth, 80), (Type)TYPE::ROOF, 
         Position(0, 0));
+    Enviroment* wall_left = new Enviroment(PATH::playerSprite,
+        Area(0, 0, 32, 32),
+        Size(80, SIZE::WindowHeight), (Type)TYPE::WALL,
+        Position(-40, 0));
+    Enviroment* wall_right = new Enviroment(PATH::playerSprite,
+        Area(0, 0, 32, 32),
+        Size(80, SIZE::WindowHeight), (Type)TYPE::WALL,
+        Position(SIZE::WindowWidth -40, 0));
     ENVIROMENT.push_back(ground);
     ENVIROMENT.push_back(roof);
+    ENVIROMENT.push_back(wall_left);
+    ENVIROMENT.push_back(wall_right);
     ENTITIES.push_back(ground);
     ENTITIES.push_back(roof);
+    ENTITIES.push_back(wall_left);
+    ENTITIES.push_back(wall_right);
     ENTITIES.push_back(player);
     ENTITIES.push_back(queen);
     COLLISIONS.push_back(player);
@@ -103,6 +115,10 @@ int main() {
     delete roof;
     Log("Deleting Ground object...");
     delete ground;
+    Log("Deleting Left Wall object...");
+    delete wall_left;
+    Log("Deleting Right Wall object...");
+    delete wall_right;
     Log("Deleting Event object...");
     delete event;
     Log("Deleting Window object...");
