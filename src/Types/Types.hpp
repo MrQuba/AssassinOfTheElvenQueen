@@ -23,3 +23,4 @@ typedef float Health;
 typedef std::string LogMessage;
 
 typedef sf::Vector2f Position;
+typedef short Type;

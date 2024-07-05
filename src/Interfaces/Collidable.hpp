@@ -5,5 +5,5 @@ class U = sf::RectangleShape>
 class Collidable {
 public:
 	virtual void onCollision(T* ent) = 0;
-	virtual void onCollisionWithGround(U* ground) = 0;
+	virtual void onCollisionWithGround(U* Enviroment) = 0;
 };

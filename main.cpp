@@ -6,7 +6,7 @@
 #include "src/Characters/Entity.hpp"
 #include "src/Characters/Player.hpp"
 #include "src/Characters/Queen.hpp"
-#include "src/Enviroment/Ground.hpp"
+#include "src/Enviroment/Enviroment.hpp"
 #include "src/Types/Types.hpp"
 #include "src/Logging/Logger.hpp"
 
@@ -14,13 +14,25 @@ int main() {
     Log("Creating Window object...");
     std::vector<Drawable*> ENTITIES;
     std::vector<Entity*> COLLISIONS;
+    std::vector<Enviroment*> ENVIROMENT;
     game::Window* window = new game::Window(sf::Vector2u(SIZE::WindowWidth, SIZE::WindowHeight), "Assassin of the Elven Queen", 60, WindowStyle(sf::Style::Fullscreen));
     Log("Creating Player object...");
     Player* player = new Player(PATH::playerSprite, Area(0, 0, 32, 32));
     Log("Creating Event object...");
     Queen* queen = new Queen(PATH::playerSprite, Area(0, 0, 32, 32));
-    Ground* ground = new Ground(PATH::playerSprite, Area(0, 0, 32, 32), Size(1920, 80));
+    Enviroment* ground = new Enviroment(PATH::playerSprite, 
+        Area(0, 0, 32, 32), 
+        Size(SIZE::WindowWidth, 80), 
+        (Type)TYPE::GROUND, 
+        Position(0, window->getWindow().getSize().y - 80));
+    Enviroment* roof = new Enviroment(PATH::playerSprite, 
+        Area(0, 0, 32, 32), 
+        Size(SIZE::WindowWidth, 80), (Type)TYPE::ROOF, 
+        Position(0, 0));
+    ENVIROMENT.push_back(ground);
+    ENVIROMENT.push_back(roof);
     ENTITIES.push_back(ground);
+    ENTITIES.push_back(roof);
     ENTITIES.push_back(player);
     ENTITIES.push_back(queen);
     COLLISIONS.push_back(player);
@@ -43,7 +55,6 @@ int main() {
             if (event->type == sf::Event::Closed) window->getWindow().close();
             if (event->type == sf::Event::KeyPressed) if(event->key.code == sf::Keyboard::Escape) window->getWindow().close();
         }
-
         for (auto& ent : ENTITIES) {
             ent->update();
             ent->draw(window->getWindow());
@@ -53,13 +64,19 @@ int main() {
                 if(ent != ent2)
             ent->onCollision(ent2);
             Console(ent->getSprite()->getPosition().y);
-            ent->onCollisionWithGround(ground);
+            for (auto& env : ENVIROMENT) {
+                env->update();
+                ent->onCollisionWithGround(env);
+            }
         }
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // PRE DRAW
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+        for (auto& env : ENVIROMENT) {
+            env->draw(window->getWindow());
+        }
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DRAW
@@ -82,6 +99,10 @@ int main() {
     delete queen;
     Log("Deleting Player object...");
     delete player;
+    Log("Deleting Roof object...");
+    delete roof;
+    Log("Deleting Ground object...");
+    delete ground;
     Log("Deleting Event object...");
     delete event;
     Log("Deleting Window object...");

@@ -36,14 +36,23 @@ public:
 	}
 
 	virtual void onCollision(Entity* ent) override {Character::onCollision(ent);}
-	virtual void onCollisionWithGround(Ground* ground) override {
-		if (checkIfCollidesWithGround(ground) == false) input->setIsFalling(true);
+	virtual void onCollisionWithGround(Enviroment* enviroment) override {
+		if (checkIfCollidesWithGround(enviroment) == false) input->setIsFalling(true);
 		else {
-			velocity.y = 0;
 			input->resetJump();
 			input->setIsFalling(false);
+			switch (enviroment->type) {
+			case (int)TYPE::GROUND:
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoudingBox()->height);
+				break;
+			case (int)TYPE::ROOF:
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y + enviroment->getRectShape().getGlobalBounds().height + this->getBoudingBox()->height);
+				break;
+			case (int)TYPE::WALL:
+
+				break;
+			}
 		}
-		Character::onCollisionWithGround(ground);
 	}
 	~Player() {
 		delete health;

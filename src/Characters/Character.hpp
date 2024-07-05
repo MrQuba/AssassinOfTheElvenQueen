@@ -9,13 +9,8 @@ public:
 	virtual void onCollision(Entity* ent) override { 
 		if (checkIfCollidesWithAnotherEntity(ent)) Console("Collission occured");
 	}
-	virtual void onCollisionWithGround(Ground* ground) override {
-		if (checkIfCollidesWithGround(ground)) {
-			this->setPosition(this->getPosition().x, ground->getRectShape().getPosition().y - this->getGlobalBounds().height);
-		}
-	}
-	bool checkIfCollidesWithGround(Ground* ground) {
-		return this->getBoudingBox()->intersects(ground->hitbox);
+	bool checkIfCollidesWithGround(Enviroment* Enviroment) {
+		return this->getBoudingBox()->intersects(Enviroment->hitbox);
 	}
 	bool checkIfCollidesWithAnotherEntity(Entity* ent) {
 		return this->getBoudingBox()->intersects(*ent->getBoudingBox());

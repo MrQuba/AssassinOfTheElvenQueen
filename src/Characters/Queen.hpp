@@ -24,14 +24,22 @@ public:
 		movement->move(&this->velocity);
 	}
 	virtual void onCollision(Entity* ent) override { Character::onCollision(ent); }
-	virtual void onCollisionWithGround(Ground* ground) override {
-		if (checkIfCollidesWithGround(ground) == false) movement->setIsFalling(true);
+	virtual void onCollisionWithGround(Enviroment* enviroment) override {
+		if (checkIfCollidesWithGround(enviroment) == false) movement->setIsFalling(true);
 		else {
-			velocity.y = 0;
-			movement->setJumpVar(false);
 			movement->setIsFalling(false);
+			switch (enviroment->type) {
+			case (int)TYPE::GROUND:
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoudingBox()->height);
+				break;
+			case (int)TYPE::ROOF:
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y + enviroment->getRectShape().getGlobalBounds().height);
+				break;
+			case (int)TYPE::WALL:
+
+				break;
+			}
 		}
-		Character::onCollisionWithGround(ground);
 	}
 	void update() override {
 		AI();
