@@ -5,18 +5,13 @@
 class Character : public Entity {
 public:
 	Character(Path txt_path, Area txt_area) : Entity(txt_path, txt_area){}
+	Character(Path txt_path, Area txt_area, Position pos) : Entity(txt_path, txt_area, pos) {}
 	~Character() {}
 	virtual void onCollision(Entity* ent) override { 
 		if (checkIfCollidesWithAnotherEntity(ent)) Console("Collission occured");
 	}
-	virtual void onCollisionWithGround(Ground* ground) override {
-		if (checkIfCollidesWithGround(ground)) {
-			this->setPosition(lastPosition);
-		}
-		else lastPosition = this->getSprite()->getPosition();
-	}
-	bool checkIfCollidesWithGround(Ground* ground) {
-		return this->getBoudingBox()->intersects(ground->hitbox);
+	bool checkIfCollidesWithGround(Enviroment* Enviroment) {
+		return this->getBoudingBox()->intersects(Enviroment->hitbox);
 	}
 	bool checkIfCollidesWithAnotherEntity(Entity* ent) {
 		return this->getBoudingBox()->intersects(*ent->getBoudingBox());
@@ -26,5 +21,4 @@ protected:
 	Health current_Health = base_Health;
 	std::unordered_set<Component*> drawableComponents;
 	std::unordered_set<Component*> importantComponents;
-	Position lastPosition;
 };

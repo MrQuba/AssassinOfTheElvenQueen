@@ -7,7 +7,7 @@
 
 class Player : public Character{
 public:
-	Player(Path txt_path, Area txt_area) : Character(txt_path, txt_area),
+	Player(Path txt_path, Area txt_area, Position pos) : Character(txt_path, txt_area, pos),
 		speed(Velocity(5.f, 25.f)),
 		velocity(Velocity(0.f, 0.f)),
 		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
@@ -44,13 +44,26 @@ public:
 	}
 
 	virtual void onCollision(Entity* ent) override {Character::onCollision(ent);}
-	virtual void onCollisionWithGround(Ground* ground) override {
-		if (checkIfCollidesWithGround(ground) == false) input->setIsFalling(true);
+	virtual void onCollisionWithGround(Enviroment* enviroment) override {
+		if (checkIfCollidesWithGround(enviroment) == false) input->setIsFalling(true);
 		else {
-			input->resetJump();
-			input->setIsFalling(false);
+			switch (enviroment->type) {
+			case (int)TYPE::GROUND:
+				input->resetJump();
+				input->setIsFalling(false);
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoudingBox()->height);
+				break;
+			case (int)TYPE::ROOF:
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y + enviroment->getRectShape().getGlobalBounds().height);
+				break;
+			case (int)TYPE::WALL:
+				if(this->velocity.x < 0)
+					this->setPosition(enviroment->getRectShape().getPosition().x + enviroment->getRectShape().getGlobalBounds().width, this->getPosition().y);
+				else if(this->velocity.x > 0)
+					this->setPosition(enviroment->getRectShape().getPosition().x - this->getBoudingBox()->width, this->getPosition().y);
+				break;
+			}
 		}
-		Character::onCollisionWithGround(ground);
 	}
 	~Player() {
 		delete health;
