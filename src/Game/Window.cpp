@@ -2,7 +2,8 @@
 game::Window::Window(sf::Vector2u size, Title title, Framerate fps, WindowStyle style)
 {
 	window.create(sf::VideoMode(size.x, size.y), title, style);
-	window.setFramerateLimit(fps);
+	window.setVerticalSyncEnabled(true);
+	//window.setFramerateLimit(fps);
 
 }
 

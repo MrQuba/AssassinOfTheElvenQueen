@@ -3,11 +3,19 @@
 #include "../Logging/Logger.hpp"
 #pragma once
 
-class Camera : public sf::View {
+class Camera {
 public:
-	Camera(Point center, Size size) : sf::View(center, size) {}
-	~Camera() = default;
-	void update(sf::Sprite* sprite) {
-		this->setCenter(sprite->getPosition().x + (sprite->getGlobalBounds().width / 2), sprite->getPosition().y + (sprite->getGlobalBounds().height / 2));
-	}
+    Camera(const Point center, const Size size)
+        : view(center, size) {}
+    
+    void update(const sf::Sprite& sprite) {
+        view.setCenter(static_cast<int>(sprite.getPosition().x + (sprite.getGlobalBounds().width / 2)), static_cast<int>(0.75f * sprite.getPosition().y ));
+    }
+    
+    sf::View& getView() {
+        return view;
+    }
+
+private:
+    sf::View view;
 };

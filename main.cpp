@@ -17,7 +17,7 @@ int main() {
     std::vector<Enviroment*> ENVIROMENT;
     game::Window* window = new game::Window(sf::Vector2u(SIZE::WindowWidth, SIZE::WindowHeight), "Assassin of the Elven Queen", 60, WindowStyle(sf::Style::Fullscreen));
     Log("Creating Player object...");
-    Player* player = new Player(PATH::playerSprite, Area(0, 0, 32, 32), Position(40, SIZE::WindowHeight - 90));
+    Player* player = new Player(PATH::playerSprite, Area(0, 0, 32, 32), Position(90, SIZE::WindowHeight - 90));
     Log("Creating Event object...");
     Queen* queen = new Queen(PATH::playerSprite, Area(0, 0, 32, 32));
     Enviroment* ground = new Enviroment(PATH::playerSprite, 
@@ -31,12 +31,12 @@ int main() {
         Position(0, 0));
     Enviroment* wall_left = new Enviroment(PATH::playerSprite,
         Area(0, 0, 32, 32),
-        Size(80, SIZE::WindowHeight), (Type)TYPE::WALL,
-        Position(-40, 0));
+        Size(80, SIZE::WindowHeight - 160), (Type)TYPE::WALL,
+        Position(0, 80));
     Enviroment* wall_right = new Enviroment(PATH::playerSprite,
         Area(0, 0, 32, 32),
-        Size(80, SIZE::WindowHeight), (Type)TYPE::WALL,
-        Position(SIZE::WindowWidth -40, 0));
+        Size(80, SIZE::WindowHeight - 160), (Type)TYPE::WALL,
+        Position(SIZE::WindowWidth-80, 80));
     ENVIROMENT.push_back(ground);
     ENVIROMENT.push_back(roof);
     ENVIROMENT.push_back(wall_left);
@@ -52,8 +52,6 @@ int main() {
     sf::Event* event = new sf::Event();
     Log("Entering Game Loop..."); 
     while (window->isOpen()) {
-        // TODO, fix this
-        window->getWindow().setView(*player->getView());
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // PRE CLEAR
@@ -69,32 +67,23 @@ int main() {
             if (event->type == sf::Event::Closed) window->getWindow().close();
             if (event->type == sf::Event::KeyPressed) if(event->key.code == sf::Keyboard::Escape) window->getWindow().close();
         }
+        for (auto& env : ENVIROMENT) {
+            env->update();
+            env->draw(window->getWindow());
+        }
         for (auto& ent : ENTITIES) {
             ent->update();
             ent->draw(window->getWindow());
         }
         for (auto& ent : COLLISIONS) {
             for (auto& ent2 : COLLISIONS)
-                if(ent != ent2)
-            ent->onCollision(ent2);
-            Console(ent->getSprite()->getPosition().y);
+                if (ent != ent2)
+                    ent->onCollision(ent2);
             for (auto& env : ENVIROMENT) {
-                env->update();
                 ent->onCollisionWithGround(env);
             }
         }
-        for (auto& ent : ENTITIES) {
-            ent->update();
-            ent->draw(window->getWindow());
-        }
-        ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        // PRE DRAW
-        ///////////////////////////////////////////////////
-        //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-        for (auto& env : ENVIROMENT) {
-            env->draw(window->getWindow());
-        }
+        window->getWindow().setView(*player->getView());
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DRAW
