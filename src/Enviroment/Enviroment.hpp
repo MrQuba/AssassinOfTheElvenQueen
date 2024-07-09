@@ -8,7 +8,7 @@ enum class TYPE{
 	ROOF = 1,
 	WALL = 10
 };
-class Enviroment : public Texture, sf::RectangleShape, public Drawable {
+class Enviroment : public Texture, public sf::RectangleShape, public Drawable {
 public:
 	Enviroment(Path txt_path, Area txt_area, Size ground_size, Type type, Position pos) : Texture(txt_path, txt_area), sf::RectangleShape(ground_size), type(type) {
 		this->setTexture(static_cast<sf::Texture*>(this));

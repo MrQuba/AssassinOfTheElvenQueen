@@ -8,7 +8,7 @@
 class Player : public Character{
 public:
 	Player(Path txt_path, Area txt_area, Position pos) : Character(txt_path, txt_area, pos),
-		speed(Velocity(5.f, 25.f)),
+		speed(Velocity(5.f, 30.f)),
 		velocity(Velocity(0.f, 0.f)),
 		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
 		health(new HealthComponent(Size(current_Health, 16.f))),
@@ -19,7 +19,7 @@ public:
 				// Adding components that should be updated always to the set
 			importantComponents.insert(input);
 			importantComponents.insert(health);
-				// Creating reference in health for variable representing current set
+				// Creating reference in health for variable representing current health
 			health->createReference(&current_Health);
 	}
 
@@ -27,14 +27,11 @@ public:
 		for (Component* comp : importantComponents) {
 			comp->update();
 		}
-		camera->update(this->getSprite());
-		health->setPos(
-			Position(
-			this->getView()->getCenter().x - (this->getView()->getSize().x / 2),
-			this->getView()->getCenter().y - (this->getView()->getSize().y / 2)
-		));
+		health->setPos(Position(camera->getView().getCenter().x - (camera->getView().getSize().x / 2),
+			camera->getView().getCenter().y - (camera->getView().getSize().y / 2)));
+		camera->update(*this->getSprite());
 	}
-	sf::View* getView() { return camera; }
+	sf::View* getView() { return &camera->getView(); }
 	void draw(sf::RenderWindow& window) override {
 		window.draw(static_cast<sf::Sprite&>(*this));
 
