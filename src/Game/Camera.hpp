@@ -9,7 +9,10 @@ public:
         : view(center, size) {}
     
     void update(const sf::Sprite& sprite) {
-        view.setCenter(static_cast<int>(sprite.getPosition().x + (sprite.getGlobalBounds().width / 2)), static_cast<int>(0.75f * sprite.getPosition().y ));
+        Position center = Position(sprite.getPosition().x + (sprite.getGlobalBounds().width / 2), center.y = 500);
+        if (center.x < 957) center.x = 957;
+        else if (center.x > 3500) center.x = 3500;
+        view.setCenter(center);
     }
     
     sf::View& getView() {

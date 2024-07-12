@@ -6,7 +6,8 @@
 enum class TYPE{
 	GROUND = 0,
 	ROOF = 1,
-	WALL = 10
+	WALL = 10,
+	BACKGROUNDWALL = 11
 };
 class Enviroment : public Texture, public sf::RectangleShape, public Drawable {
 public:
