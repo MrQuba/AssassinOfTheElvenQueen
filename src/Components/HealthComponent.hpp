@@ -1,5 +1,5 @@
 #include "Component.hpp"
-#include "..\Types\Types.hpp"
+#include "../Types/Types.hpp"
 #include <SFML/Graphics.hpp>
 #pragma once
 class HealthComponent : public Component, sf::RectangleShape  {
