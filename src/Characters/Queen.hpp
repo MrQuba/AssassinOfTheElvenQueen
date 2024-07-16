@@ -26,9 +26,9 @@ public:
 	}
 	virtual void onCollision(Entity* ent) override { Character::onCollision(ent); }
 	virtual void onCollisionWithGround(Enviroment* enviroment) override {
-		if (checkIfCollidesWithGround(enviroment) == false) movement->setIsFalling(true);
+		if (checkIfCollidesWithGround(enviroment) == false) movement->isFalling = true;
 		else {
-			movement->setIsFalling(false);
+			movement->isFalling = false;
 			switch (enviroment->type) {
 			case (int)TYPE::GROUND:
 				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoudingBox()->height);

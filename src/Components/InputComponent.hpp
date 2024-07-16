@@ -18,14 +18,20 @@ public:
 			movement->setJumpVar(true);
 			velocityPointer->y += -speed->y;
 		}
+		if(isKeyPressed(config->DASH) && movement->isDashing == false && movement->canDash){
+
+			movement->isDashing = true;
+			movement->canDash = false;
+			movement->restartDashClock();
+		}
 		//move entity
 		movement->move(velocityPointer);
 	}
 	void resetJump(){
-		movement->setJumpVar(false);
+		movement->isJumping = false;
 	}
 	void setIsFalling(bool b) {
-		movement->setIsFalling(b);
+		movement->isFalling = b;
 	}
 	Config::DataStructure* getConfig() { return config; }
 	~InputComponent() { 

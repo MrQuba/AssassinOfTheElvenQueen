@@ -12,11 +12,7 @@ namespace game {
 			/// <param name="fps">default 60</param>
 			/// <param name="style">default sf::Style::Default</param>
 			Window(sf::Vector2u size = sf::Vector2u(600, 800), Title title = "Window", Framerate fps = 60, WindowStyle style = sf::Style::Default);
-			/// <summary>
-			/// 
-			/// </summary>
-			/// <returns>true if </returns>
-			bool isOpen();
+		bool isOpen();
 		sf::RenderWindow& getWindow();
 		~Window();
 	private:
