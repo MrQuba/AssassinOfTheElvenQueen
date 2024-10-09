@@ -1,5 +1,6 @@
 #include "../Types/Types.hpp"
 #pragma once
-namespace ENVIROMENT {
-	Force GRAVITY = 0.981f;
-}
+class ENVIROMENT {
+  public:
+	  static constexpr Force GRAVITY{0.981f};
+};

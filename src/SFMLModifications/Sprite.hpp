@@ -13,7 +13,7 @@ public:
 	sf::Sprite* getSprite() {
 		return this;
 	}
-	BoundingBox* getBoudingBox() {
+	BoundingBox* getBoundingBox() {
 		return &this->boundingBox;
 	}
 	void move(Velocity velocity){

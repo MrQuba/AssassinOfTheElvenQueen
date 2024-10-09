@@ -5,12 +5,13 @@
 #include "src/Constants/Paths.hpp"
 #include "src/Characters/Entity.hpp"
 #include "src/Characters/Player.hpp"
-#include "src/Characters/Queen.hpp"
+#include "src/Characters/Queen/Queen.hpp"
 #include "src/Enviroment/Enviroment.hpp"
 #include "src/Types/Types.hpp"
 #include "src/Logging/Logger.hpp"
-
+// TODO, clean code
 int main() {
+	short scene = 1;
     Log("Creating Window object...");
     std::vector<Drawable*> ENTITIES;
     std::vector<Entity*> COLLISIONS;
@@ -20,7 +21,7 @@ int main() {
     Player* player = new Player(PATH::playerTexture, Area(0, 0, 32, 32), Position(90, SIZE::WindowHeight - 90));
     player->setColor(sf::Color::Red);
     Log("Creating Event object...");
-    Queen* queen = new Queen(PATH::playerTexture, Area(0, 0, 32, 32));
+    Queen* queen = new Queen(PATH::playerTexture, Area(0, 0, 32, 32), player,  Position(SIZE::WorldWidth / 2, SIZE::WorldHeight / 2));
     Enviroment* ground = new Enviroment(PATH::enviromentTexture,
         Area(0, 0, 32, 32), 
         Size(SIZE::WorldWidth, SIZE::GroundHeight),
@@ -73,23 +74,31 @@ int main() {
             if (event->type == sf::Event::Closed) window->getWindow().close();
             if (event->type == sf::Event::KeyPressed) if(event->key.code == sf::Keyboard::Escape) window->getWindow().close();
         }
-        for (auto& env : ENVIROMENT) {
-            env->update();
-            env->draw(window->getWindow());
-        }
-        for (auto& ent : ENTITIES) {
-            ent->update();
-            ent->draw(window->getWindow());
-        }
-        for (auto& ent : COLLISIONS) {
-            for (auto& ent2 : COLLISIONS)
-                if (ent != ent2)
-                    ent->onCollision(ent2);
-            for (auto& env : ENVIROMENT) {
-                ent->onCollisionWithGround(env);
-            }
-        }
-        window->getWindow().setView(*player->getView());
+	// TODO, create enum with names for scenes
+	switch(scene){
+		case 0: // Main menu
+
+			break;
+		case 1: // Game
+			background->draw(window->getWindow());
+        		for (auto& ent : ENTITIES) {
+            			ent->update();
+            			ent->draw(window->getWindow());
+       			 }
+       			 for (auto& ent : COLLISIONS) {
+            			for (auto& ent2 : COLLISIONS)
+             				   if (ent != ent2)
+                 				   ent->onCollision(ent2);
+            				   for (auto& env : ENVIROMENT) {
+              					  ent->onCollisionWithGround(env);
+           		 		   }
+        		}
+        		window->getWindow().setView(*player->getView());
+        if(player->current_Health <= 0) scene = 3;
+			break;
+		case 3: // Finish screen
+			break;
+	}
         ///////////////////////////////////////////////////
         //-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
         // POST DRAW
