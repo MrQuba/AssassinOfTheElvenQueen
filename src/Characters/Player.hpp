@@ -27,9 +27,18 @@ public:
 		for (Component* comp : importantComponents) {
 			comp->update();
 		}
+    if(slow_time > 0 ) slow_time--;
+    else slow = 1;
 		health->setPos(Position(camera->getView().getCenter().x - (camera->getView().getSize().x / 2),
 			camera->getView().getCenter().y - (camera->getView().getSize().y / 2)));
 		camera->update(*this->getSprite());
+
+    if(resetCameraInterval == 0 && resetCameraRotation){
+      resetCameraInterval = 3;
+      camera->getView().setRotation(0);
+    }
+    else if(resetCameraRotation && resetCameraInterval != 0) 
+      resetCameraInterval--;
 	}
 	sf::View* getView() { return &camera->getView(); }
 	void draw(sf::RenderWindow& window) override {
@@ -48,7 +57,7 @@ public:
 			case (int)TYPE::GROUND:
 				input->resetJump();
 				input->setIsFalling(false);
-				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoudingBox()->height);
+				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y - this->getBoundingBox()->height);
 				break;
 			case (int)TYPE::ROOF:
 				this->setPosition(this->getPosition().x, enviroment->getRectShape().getPosition().y + enviroment->getRectShape().getGlobalBounds().height);
@@ -57,11 +66,17 @@ public:
 				if(this->velocity.x < 0)
 					this->setPosition(enviroment->getRectShape().getPosition().x + enviroment->getRectShape().getGlobalBounds().width, this->getPosition().y);
 				else if(this->velocity.x > 0)
-					this->setPosition(enviroment->getRectShape().getPosition().x - this->getBoudingBox()->width, this->getPosition().y);
+					this->setPosition(enviroment->getRectShape().getPosition().x - this->getBoundingBox()->width, this->getPosition().y);
 				break;
 			}
 		}
 	}
+  void damage(int dmg) override{
+    if(invicible) return;
+    this->camera->getView().rotate((dmg > 4)? dmg / 4 : dmg / 2);
+    this->current_Health -= dmg;
+    resetCameraRotation = true;
+  }
 	~Player() {
 		delete health;
 		delete input;
@@ -71,5 +86,7 @@ private:
 	HealthComponent* health;
 	const Velocity speed;
 	Velocity velocity;
+  bool resetCameraRotation = false;
+  short resetCameraInterval = 3;
 	Camera* camera;
 };
