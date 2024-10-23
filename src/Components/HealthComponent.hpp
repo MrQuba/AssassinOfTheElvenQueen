@@ -6,7 +6,7 @@ class HealthComponent : public Component, sf::RectangleShape  {
 public:
 	HealthComponent(Size size) : RectangleShape(size), background(size) {
 		this->setFillColor(sf::Color::Red);
-		background.setFillColor(sf::Color::Black);
+		background.setFillColor(sf::Color::White);
 	}
 	void update() override {
 		//if (health_Pointer = nullptr) 

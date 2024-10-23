@@ -18,7 +18,7 @@ int main() {
     std::vector<Enviroment*> ENVIROMENT;
     game::Window* window = new game::Window(sf::Vector2u(SIZE::WindowWidth, SIZE::WindowHeight), "Assassin of the Elven Queen", 60, WindowStyle(sf::Style::Fullscreen));
     Log("Creating Player object...");
-    Player* player = new Player(PATH::playerTexture, Area(0, 0, 32, 32), Position(90, SIZE::WindowHeight - 90));
+    Player<Queen>* player = new Player<Queen>(PATH::playerTexture, Area(0, 0, 32, 32), Position(90, SIZE::WindowHeight - 90));
     player->setColor(sf::Color::Red);
     Log("Creating Event object...");
     Queen* queen = new Queen(PATH::playerTexture, Area(0, 0, 32, 32), player,  Position(SIZE::WorldWidth / 2, SIZE::WorldHeight / 2));
@@ -43,6 +43,7 @@ int main() {
         Area(0, 0, SIZE::WorldWidth, SIZE::WorldHeight),
         Size(SIZE::WorldWidth, SIZE::WorldHeight), (Type)TYPE::BACKGROUNDWALL,
         Position(0,0));
+    player->boss_ptr = queen;
     ENVIROMENT.push_back(background);
     ENVIROMENT.push_back(ground);
     ENVIROMENT.push_back(roof);
