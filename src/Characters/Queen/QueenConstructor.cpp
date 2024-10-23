@@ -1,7 +1,7 @@
 #include "Queen.hpp"
 #include <random>
 
-Queen::Queen(Path txt_path, Area txt_area, Player *target, Position pos)
+Queen::Queen(Path txt_path, Area txt_area, Player<Queen> *target, Position pos)
     : NPC(txt_path, txt_area, pos), velocity(Velocity(0.f, 0.f)),
       player(target), movement(new MovementComponent<Queen>(this)),
       health(new HealthComponent(Size(current_Health, 16.f))),

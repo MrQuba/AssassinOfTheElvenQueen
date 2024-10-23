@@ -25,11 +25,11 @@ concept invocable = requires(F &&f, Args &&...args) {
 
 class Queen : public NPC {
 public:
-  Queen(Path txt_path, Area txt_area, Player *target,
+  Queen(Path txt_path, Area txt_area, Player<Queen> *target,
         Position pos = Position(0, 0));
 
-  Player *player;
-  Phase phase = 2;
+  Player<Queen> *player;
+  Phase phase = 1;
   void AI() override; 
   std::list<Projectile *> projectiles;
 
@@ -68,7 +68,9 @@ public:
       it = projectiles.erase(it);
     }
   }
-
+  void damage(int dmg) override{
+    this->current_Health -= dmg;
+  }
 private:
   short movementAmplitude = 6;
   short collidedWithWall = 0;

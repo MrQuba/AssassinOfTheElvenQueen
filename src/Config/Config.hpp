@@ -7,6 +7,7 @@ namespace Config {
 	const Key bRIGHT = sf::Keyboard::D;
 	const Key bJUMP = sf::Keyboard::Space;
 	const Key bDASH = sf::Keyboard::LShift;
+	const Key bATTACK = sf::Keyboard::E;
 	class DataStructure {
 	public:
 		 DataStructure() {
@@ -15,6 +16,7 @@ namespace Config {
 			RIGHT = bRIGHT;
 			JUMP = bJUMP;
 			DASH = bDASH;
+			ATTACK = bATTACK;
 		}
 		// TODO, add a initializer for custom config
 		mutable Key DOWN;
@@ -22,5 +24,6 @@ namespace Config {
 		mutable Key RIGHT;
 		mutable Key JUMP;
 		mutable Key DASH;
+		mutable Key ATTACK;
 	};
 }

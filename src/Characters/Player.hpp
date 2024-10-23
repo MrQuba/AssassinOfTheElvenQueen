@@ -3,8 +3,10 @@
 #include "../Components/HealthComponent.hpp"
 #include "../Game/Camera.hpp"
 #include "../Constants/SizeConstants.hpp"
+#include "../Projectiles/Projectile.hpp"
+#include <vector>
 #pragma once
-
+template<class B = NPC>
 class Player : public Character{
 public:
 	Player(Path txt_path, Area txt_area, Position pos) : Character(txt_path, txt_area, pos),
@@ -12,7 +14,7 @@ public:
 		velocity(Velocity(0.f, 0.f)),
 		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
 		health(new HealthComponent(Size(current_Health, 16.f))),
-		camera(new Camera(Point(SIZE::WindowWidth / 2, SIZE::WindowHeight / 2), Size(SIZE::WindowWidth, SIZE::WindowHeight))) {
+		camera(new Camera(Point(SIZE::WindowWidth / 2.f, SIZE::WindowHeight / 2.f), Size(SIZE::WindowWidth, SIZE::WindowHeight))) {
 			// Constructor
 				// Adding components that can be drawn to the set
 			drawableComponents.insert(health);
@@ -27,6 +29,22 @@ public:
 		for (Component* comp : importantComponents) {
 			comp->update();
 		}
+		if(projFrameSkip == bProjFrameSkip){
+			projFrameSkip = 0;
+			for (auto it = proj.begin(); it != proj.end();) {
+        		if ((*it)->shouldBeKilled()) {
+          			(*it)->kill();
+          			it = proj.erase(it);
+        		} else {
+          			(*it)->update();
+        		   if ((*it)->checkIfCollidesWithAnotherEntity(boss_ptr))
+           				(*it)->onCollision(boss_ptr);
+          		++it;
+        }
+      }
+	}
+		else  
+		 projFrameSkip++;
     if(slow_time > 0 ) slow_time--;
     else slow = 1;
 		health->setPos(Position(camera->getView().getCenter().x - (camera->getView().getSize().x / 2),
@@ -46,6 +64,9 @@ public:
 
 		for (Component* comp : drawableComponents) {
 			comp->draw(window);
+		}
+		for(auto p : proj){
+			p->draw(window);
 		}
 	}
 
@@ -79,8 +100,15 @@ public:
   }
 	~Player() {
 		delete health;
-		delete input;
+		delete input;    
+		delete boss_ptr;
+	for (auto it = proj.begin(); it != proj.end();) {
+      (*it)->kill();
+      it = proj.erase(it);
+    }
 	}
+	std::vector<Projectile*> proj;
+	B* boss_ptr;
 private:
 	InputComponent<Player>* input;
 	HealthComponent* health;
@@ -89,4 +117,6 @@ private:
   bool resetCameraRotation = false;
   short resetCameraInterval = 3;
 	Camera* camera;
+	DefaultCooldown bProjFrameSkip = 1;
+	Cooldown projFrameSkip = bProjFrameSkip;
 };
