@@ -4,12 +4,14 @@
 #include "../Game/Camera.hpp"
 #include "../Constants/SizeConstants.hpp"
 #include "../Projectiles/Projectile.hpp"
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
 #pragma once
 template<class B = NPC>
 class Player : public Character{
 public:
-	Player(Path txt_path, Area txt_area, Position pos) : Character(txt_path, txt_area, pos),
+	Player(Path txt_path, Area txt_area, Position pos, sf::RenderWindow* wptr) : Character(txt_path, txt_area, pos),
+		win_ptr(wptr),
 		speed(Velocity(5.f, 30.f)),
 		velocity(Velocity(0.f, 0.f)),
 		input(new InputComponent<Player>(&this->speed, &this->velocity, this)),
@@ -37,8 +39,9 @@ public:
           			it = proj.erase(it);
         		} else {
           			(*it)->update();
-        		   if ((*it)->checkIfCollidesWithAnotherEntity(boss_ptr))
+        		   if ((*it)->checkIfCollidesWithAnotherEntity(boss_ptr)){
            				(*it)->onCollision(boss_ptr);
+				   }
           		++it;
         }
       }
@@ -102,6 +105,7 @@ public:
 		delete health;
 		delete input;    
 		delete boss_ptr;
+		delete win_ptr;
 	for (auto it = proj.begin(); it != proj.end();) {
       (*it)->kill();
       it = proj.erase(it);
@@ -109,6 +113,7 @@ public:
 	}
 	std::vector<Projectile*> proj;
 	B* boss_ptr;
+	sf::RenderWindow* win_ptr;
 private:
 	InputComponent<Player>* input;
 	HealthComponent* health;

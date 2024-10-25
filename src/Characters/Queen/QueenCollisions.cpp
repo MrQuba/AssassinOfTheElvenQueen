@@ -5,7 +5,7 @@
   }
 
 	void Queen::onCollisionWithGround(Enviroment* enviroment){
-    if (!checkIfCollidesWithGround(enviroment)) movement->isFalling = true;
+    if (!checkIfCollidesWithGround(enviroment)) movement->isFalling = true; // && enviroment->type == (int)TYPE::ROOF
     else {
 			movement->isFalling = false;
 			switch (enviroment->type) {
@@ -31,5 +31,8 @@
 					break;
 			}
 		}
+		
+		if(this->getPosition().y < SIZE::GroundHeight) this->setPosition(this->getPosition().x, SIZE::GroundHeight);
+		else if(this->getPosition().y > (SIZE::WindowHeight-SIZE::GroundHeight)+this->getGlobalBounds().height) this->setPosition(this->getPosition().x, (SIZE::WindowHeight-SIZE::GroundHeight)-this->getGlobalBounds().height);
 	}  
 

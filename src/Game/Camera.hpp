@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include "../Types/Types.hpp"
-#include "../Logging/Logger.hpp"
 #pragma once
 
 class Camera {

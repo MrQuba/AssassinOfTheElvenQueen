@@ -23,7 +23,6 @@ typedef sf::Vector2f Scale;
 typedef sf::Vector2f Point;
 typedef float Health;
 
-typedef std::string LogMessage;
 
 typedef sf::Vector2f Position;
 typedef short Type;

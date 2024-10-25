@@ -19,7 +19,6 @@ public:
   virtual void damage(int dmg){}
   short slow = 1;
   int slow_time = 0;
-	mutable Health base_Health = 200; // TODO, remove this, if possible
 	Health current_Health;
   bool invicible = false;
 	~Entity() {}

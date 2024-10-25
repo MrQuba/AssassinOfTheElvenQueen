@@ -18,7 +18,6 @@ namespace Config {
 			DASH = bDASH;
 			ATTACK = bATTACK;
 		}
-		// TODO, add a initializer for custom config
 		mutable Key DOWN;
 		mutable Key LEFT;
 		mutable Key RIGHT;
