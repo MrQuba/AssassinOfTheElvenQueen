@@ -29,19 +29,22 @@ public:
         Position pos = Position(0, 0));
 
   Player<Queen> *player;
-  Phase phase = 1;
+  Phase phase = 0;
   void AI() override; 
   std::list<Projectile *> projectiles;
 
   void onCollision(Entity *ent) override;
   void onCollisionWithGround(Enviroment *enviroment) override;
 
-  void update() override {
+  void update() override { 
     AI();
     displayHealth = current_Health * 0.25f;
     for (Component *comp : importantComponents) {
       comp->update();
     }
+    if(current_Health <= 3500.f && phase == 0) phase = 1;
+    if(current_Health < 3500.f / 2 && phase == 1) phase = 2;
+    if(current_Health <= 0 && phase == 2) phase = 3;
     if (projCooldown == 0) {
       projCooldown = bProjCooldown;
       for (auto it = projectiles.begin(); it != projectiles.end();) {
@@ -130,5 +133,8 @@ private:
         (collidedWithWall == 1 && velocity.x > 0), this->velocity.x);
     Math<float>::InvertVarIfConditionMet(
         (collidedWithWall == 2 && velocity.x < 0), this->velocity.x);
+      if(phase != 0 && velocity.x == 0){
+        velocity.x = speed.x * ((player->getPosition().x - this->getPosition().x) ? -1 : 1);
+      }
   }
 };

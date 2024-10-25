@@ -14,7 +14,10 @@ public:
     return this->getBoundingBox()->intersects(Enviroment->hitbox);
   }
   bool checkIfCollidesWithAnotherEntity(Entity *ent) {
-    return this->getBoundingBox()->intersects(*ent->getBoundingBox());
+    BoundingBox hitbox = *(this->getBoundingBox());
+    hitbox.width *= this->getScale().x;
+    hitbox.height *= this->getScale().y;
+    return hitbox.intersects(*(ent->getBoundingBox()));
   }
 
 protected:

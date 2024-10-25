@@ -7,8 +7,10 @@ void Queen::AI() {
   if (oldPosX >= 1000)
     oldPosX /= 100;
   initVelocityX();
+  std::cout << velocity.x << std::endl;
   switch (phase) {
   case 0:
+  break;
   case 1:
     velocity.y = Math<float>::CalculateFunctionValueForX(
         oldPosX, &std::cos, (float)movementAmplitude * oldPosX);
@@ -53,6 +55,7 @@ void Queen::AI() {
     }
     break;
   }
+  if(phase != 0 ){
    velocity.y = std::trunc(velocity.y * 100);
    velocity.y /= 100;
    if(positive_velocity){
@@ -61,6 +64,7 @@ void Queen::AI() {
    else {
       Math<float>::InvertVarIfConditionMet(velocity.y > 0, this->velocity.y);
    }
+  }
   movement->move(&velocity);
 
   if (this->getPosition().x + this->getBoundingBox()->width >=
@@ -86,7 +90,6 @@ void Queen::spawnLasers(int amount, int interval) {
   }
 }
 void Queen::spawnHorizontalLasers(int amount, int interval) {
-  Console(amount);
   for (int i = 0; i <= amount; i++) {
     projectiles.push_back(
         new Lasers(PATH::playerTexture, Area(0, 0, 8, 8), 0,

@@ -25,6 +25,9 @@ public:
 		window.draw(background);
 		window.draw(static_cast<sf::RectangleShape&>(*this));
 	}
+	void setBgColor(const sf::Color c){
+		background.setFillColor(c);
+	}
 	~HealthComponent() {}
 private:
 	sf::RectangleShape background;
